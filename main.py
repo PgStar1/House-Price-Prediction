@@ -1,17 +1,12 @@
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+from src.preprocessing import preprocess
+from src.model import train_model
 
 df = pd.read_csv('data/train.csv')
+df_clean = preprocess(df)
+rmse = train_model(df_clean)
 
-# Overview
-print(df.shape)
-print(df.info())
+print(f"RMSE: {rmse}")
 
-# Correlation with SalePrice
-corr = df.corr()['SalePrice'].sort_values(ascending=False)
-print(corr.head(10))
-
-# Visuals
-sns.histplot(df['SalePrice'], kde=True)
-sns.boxplot(x='OverallQual', y='SalePrice', data=df)
+with open("results/metrics.txt", "w") as f:
+    f.write(f"RMSE: {rmse}")
