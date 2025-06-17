@@ -2,6 +2,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import numpy as np
+import joblib
+
 
 def train_model(df):
     X = df.drop('SalePrice', axis=1)
@@ -11,6 +13,8 @@ def train_model(df):
     model = RandomForestRegressor(n_estimators=100)
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
+    
+    joblib.dump(X_train.columns.tolist(), 'models/model_features.pkl')
 
     rmse = np.sqrt(mean_squared_error(y_test, predictions))
     return rmse
